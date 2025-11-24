@@ -5,25 +5,49 @@ const ctx = canvas.getContext('2d');
 
 let width, height;
 let orbs = [];
+let mouse = { x: 0, y: 0 };
 
 class Orb {
     constructor() {
         this.reset();
+        this.targetX = this.x;
+        this.targetY = this.y;
     }
 
     reset() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.radius = Math.random() * 150 + 100;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
+        this.targetX = this.x;
+        this.targetY = this.y;
+        this.radius = Math.random() * 200 + 150;
+        this.baseVx = (Math.random() - 0.5) * 0.3;
+        this.baseVy = (Math.random() - 0.5) * 0.3;
+        this.vx = this.baseVx;
+        this.vy = this.baseVy;
         this.hue = Math.random() * 60 + 220; // Blue to purple range
+        this.opacity = Math.random() * 0.15 + 0.05;
     }
 
     update() {
+        // Mouse interaction
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 300) {
+            const force = (300 - distance) / 300;
+            this.vx -= (dx / distance) * force * 0.5;
+            this.vy -= (dy / distance) * force * 0.5;
+        }
+
+        // Gradual return to base velocity
+        this.vx += (this.baseVx - this.vx) * 0.05;
+        this.vy += (this.baseVy - this.vy) * 0.05;
+
         this.x += this.vx;
         this.y += this.vy;
 
+        // Wrap around screen
         if (this.x < -this.radius) this.x = width + this.radius;
         if (this.x > width + this.radius) this.x = -this.radius;
         if (this.y < -this.radius) this.y = height + this.radius;
@@ -36,9 +60,9 @@ class Orb {
             this.x, this.y, this.radius
         );
 
-        gradient.addColorStop(0, `hsla(${this.hue}, 70%, 60%, 0.1)`);
-        gradient.addColorStop(0.5, `hsla(${this.hue}, 70%, 50%, 0.05)`);
-        gradient.addColorStop(1, `hsla(${this.hue}, 70%, 40%, 0)`);
+        gradient.addColorStop(0, `hsla(${this.hue}, 80%, 65%, ${this.opacity * 0.8})`);
+        gradient.addColorStop(0.4, `hsla(${this.hue}, 75%, 55%, ${this.opacity * 0.4})`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 70%, 45%, 0)`);
 
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -52,14 +76,14 @@ function resize() {
     height = canvas.height = window.innerHeight;
 
     orbs = [];
-    const orbCount = Math.floor((width * height) / 80000);
+    const orbCount = Math.max(5, Math.floor((width * height) / 60000));
     for (let i = 0; i < orbCount; i++) {
         orbs.push(new Orb());
     }
 }
 
 function animate() {
-    ctx.fillStyle = 'rgba(10, 15, 28, 0.05)';
+    ctx.fillStyle = 'rgba(10, 15, 28, 0.08)';
     ctx.fillRect(0, 0, width, height);
 
     orbs.forEach(orb => {
@@ -71,6 +95,10 @@ function animate() {
 }
 
 window.addEventListener('resize', resize);
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
 
 // Init
 resize();
@@ -89,7 +117,6 @@ function type() {
     }
 }
 
-// Start typing after a short delay
 setTimeout(type, 500);
 
 // Scroll Animations
