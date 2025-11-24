@@ -24,7 +24,7 @@ class Orb {
         this.baseVy = (Math.random() - 0.5) * 0.3;
         this.vx = this.baseVx;
         this.vy = this.baseVy;
-        this.hue = Math.random() * 60 + 220; // Blue to purple range
+        this.hue = Math.random() * 30 + 180; // Cyan to blue range
         this.opacity = Math.random() * 0.15 + 0.05;
     }
 
