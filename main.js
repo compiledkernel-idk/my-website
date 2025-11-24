@@ -4,51 +4,77 @@ const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
 let width, height;
+let orbs = [];
 
-// Matrix Rain Configuration
-const fontSize = 14;
-const columns = [];
-const drops = [];
+class Orb {
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = Math.random() * 150 + 100;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.hue = Math.random() * 60 + 220; // Blue to purple range
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -this.radius) this.x = width + this.radius;
+        if (this.x > width + this.radius) this.x = -this.radius;
+        if (this.y < -this.radius) this.y = height + this.radius;
+        if (this.y > height + this.radius) this.y = -this.radius;
+    }
+
+    draw() {
+        const gradient = ctx.createRadialGradient(
+            this.x, this.y, 0,
+            this.x, this.y, this.radius
+        );
+
+        gradient.addColorStop(0, `hsla(${this.hue}, 70%, 60%, 0.1)`);
+        gradient.addColorStop(0.5, `hsla(${this.hue}, 70%, 50%, 0.05)`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 70%, 40%, 0)`);
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
 
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
 
-    const colCount = Math.floor(width / fontSize);
-    drops.length = colCount;
-    for (let i = 0; i < colCount; i++) {
-        drops[i] = Math.random() * -100; // Start above screen
+    orbs = [];
+    const orbCount = Math.floor((width * height) / 80000);
+    for (let i = 0; i < orbCount; i++) {
+        orbs.push(new Orb());
     }
 }
 
-function drawMatrix() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Fade effect
+function animate() {
+    ctx.fillStyle = 'rgba(10, 15, 28, 0.05)';
     ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = '#0F0'; // Green text
-    ctx.font = `${fontSize}px monospace`;
+    orbs.forEach(orb => {
+        orb.update();
+        orb.draw();
+    });
 
-    for (let i = 0; i < drops.length; i++) {
-        const text = String.fromCharCode(0x30A0 + Math.random() * 96); // Katakana characters
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        ctx.fillText(text, x, y);
-
-        if (y > height && Math.random() > 0.975) {
-            drops[i] = 0;
-        }
-        drops[i]++;
-    }
-
-    requestAnimationFrame(drawMatrix);
+    requestAnimationFrame(animate);
 }
 
 window.addEventListener('resize', resize);
 
-// Init Matrix
+// Init
 resize();
-drawMatrix();
+animate();
 
 // Typing Animation
 const text = "compiledkernel-idk";
@@ -59,11 +85,7 @@ function type() {
     if (charIndex < text.length) {
         typingElement.textContent += text.charAt(charIndex);
         charIndex++;
-        setTimeout(type, 100); // Typing speed
-    } else {
-        // Add glitch class after typing is done
-        typingElement.classList.add('glitch');
-        typingElement.setAttribute('data-text', text);
+        setTimeout(type, 100);
     }
 }
 

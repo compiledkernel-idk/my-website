@@ -1,11 +1,14 @@
 :root {
-    --bg-color: #000000;
-    --text-primary: #00ff00;
-    --text-secondary: #008f11;
-    --accent-color: #00ff00;
-    --card-bg: rgba(0, 20, 0, 0.7);
-    --card-border: rgba(0, 255, 0, 0.2);
-    --font-main: 'Share Tech Mono', monospace;
+    --bg-gradient-start: #0a0f1c;
+    --bg-gradient-end: #1a1f3a;
+    --text-primary: #e8edf4;
+    --text-secondary: #9ca3af;
+    --accent-start: #667eea;
+    --accent-end: #764ba2;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
 * {
@@ -15,14 +18,15 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     color: var(--text-primary);
-    font-family: var(--font-main);
+    font-family: var(--font-body);
     overflow-x: hidden;
-    line-height: 1.6;
+    line-height: 1.7;
+    min-height: 100vh;
 }
 
-/* Matrix Canvas */
+/* Animated Background */
 #bg-canvas {
     position: fixed;
     top: 0;
@@ -30,125 +34,72 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.3;
 }
 
 main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 /* Typography */
 h1 {
+    font-family: var(--font-heading);
     font-size: 5rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px var(--accent-color);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 1rem;
     min-height: 1.2em;
+    letter-spacing: -0.02em;
 }
 
 h2 {
+    font-family: var(--font-heading);
     font-size: 2.5rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 3rem;
+    position: relative;
     display: inline-block;
-    padding-bottom: 0.5rem;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    border-radius: 2px;
+}
+
+h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
 }
 
 p {
     color: var(--text-secondary);
-    font-size: 1.1rem;
-}
-
-/* Glitch Effect */
-.glitch {
-    position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-color);
-}
-
-.glitch::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-1 5s infinite linear alternate-reverse;
-}
-
-.glitch::after {
-    left: -2px;
-    text-shadow: -1px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-2 5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim-1 {
-    0% {
-        clip: rect(20px, 9999px, 10px, 0);
-    }
-
-    20% {
-        clip: rect(60px, 9999px, 30px, 0);
-    }
-
-    40% {
-        clip: rect(80px, 9999px, 50px, 0);
-    }
-
-    60% {
-        clip: rect(10px, 9999px, 40px, 0);
-    }
-
-    80% {
-        clip: rect(50px, 9999px, 20px, 0);
-    }
-
-    100% {
-        clip: rect(30px, 9999px, 60px, 0);
-    }
-}
-
-@keyframes glitch-anim-2 {
-    0% {
-        clip: rect(60px, 9999px, 30px, 0);
-    }
-
-    20% {
-        clip: rect(10px, 9999px, 40px, 0);
-    }
-
-    40% {
-        clip: rect(50px, 9999px, 20px, 0);
-    }
-
-    60% {
-        clip: rect(30px, 9999px, 60px, 0);
-    }
-
-    80% {
-        clip: rect(80px, 9999px, 50px, 0);
-    }
-
-    100% {
-        clip: rect(20px, 9999px, 10px, 0);
-    }
+    font-size: 1.05rem;
+    font-weight: 400;
 }
 
 /* Typing Cursor */
 .typing-text::after {
-    content: '█';
+    content: '|';
     animation: blink 1s infinite;
-    color: var(--accent-color);
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-left: 5px;
 }
 
@@ -176,7 +127,9 @@ p {
 
 .subtitle {
     font-size: 1.5rem;
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 .scroll-indicator {
@@ -188,12 +141,20 @@ p {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-primary);
-    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
 }
 
 .arrow {
     animation: bounce 2s infinite;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Sections */
@@ -204,44 +165,70 @@ section {
 /* Projects Grid */
 .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
 }
 
 .project-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 4px;
-    padding: 2rem;
+    border-radius: 16px;
+    padding: 2.5rem;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    opacity: 0;
+    transition: opacity 0.4s;
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
-    background: rgba(0, 40, 0, 0.8);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(102, 126, 234, 0.3);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(102, 126, 234, 0.1);
 }
 
-.project-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
+.project-card:hover::before {
+    opacity: 1;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
 }
 
 .link-text {
     display: inline-block;
     margin-top: 1.5rem;
-    color: var(--accent-color);
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    transition: transform 0.3s;
+}
+
+.project-card:hover .link-text {
+    transform: translateX(5px);
 }
 
 /* Footer */
@@ -255,19 +242,39 @@ footer {
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    margin-bottom: 1rem;
+    gap: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .social-links a {
     color: var(--text-primary);
     text-decoration: none;
-    transition: text-shadow 0.2s;
+    transition: all 0.3s;
+    font-weight: 500;
     text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    position: relative;
 }
 
-.social-links a:hover {
-    text-shadow: 0 0 10px var(--accent-color);
+.social-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+    transition: width 0.3s;
+}
+
+.social-links a:hover::after {
+    width: 100%;
+}
+
+footer p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 /* Animations */
@@ -314,7 +321,8 @@ footer {
 .fade-in {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-in.visible {
@@ -328,7 +336,15 @@ footer {
         font-size: 3rem;
     }
 
+    h2 {
+        font-size: 2rem;
+    }
+
     main {
         padding: 0 1.5rem;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr;
     }
 }
