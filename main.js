@@ -1,6 +1,7 @@
 import './style.css'
 
 const canvas = document.getElementById('bg-canvas');
+if (!canvas) throw new Error("Canvas not found");
 const ctx = canvas.getContext('2d');
 
 let width, height;
@@ -117,7 +118,9 @@ function type() {
     }
 }
 
-setTimeout(type, 500);
+if (typingElement) {
+    setTimeout(type, 500);
+}
 
 // Scroll Animations
 const observerOptions = {
