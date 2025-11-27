@@ -1,0 +1,51 @@
+# 1. Copy Installer to Website
+$installerPath = "C:\Users\Lenovo\kebab-empire\dist\Kebab Empire Setup 1.0.0.exe"
+$websitePath = "C:\Users\Lenovo\Website"
+$destPath = "$websitePath\public\KebabEmpireSetup.exe"
+
+# Ensure public folder exists
+if (!(Test-Path "$websitePath\public")) { New-Item -ItemType Directory -Path "$websitePath\public" }
+
+Copy-Item -Path $installerPath -Destination $destPath -Force
+Write-Host "✅ Installer copied to Website!" -ForegroundColor Green
+
+# 2. Add Download Link to index.html
+$htmlPath = "$websitePath\index.html"
+$htmlContent = Get-Content $htmlPath -Raw
+
+# Check if link already exists to avoid duplicates
+if ($htmlContent -notmatch "KebabEmpireSetup.exe") {
+    # Insert link before the closing </body> tag (or inside a specific container if you prefer)
+    # This is a simple append to the body for visibility
+    $downloadLink = @"
+    <div style='position: fixed; bottom: 20px; right: 20px; z-index: 9999;'>
+        <a href='public/KebabEmpireSetup.exe' style='background: #ff0000; color: white; padding: 15px 30px; text-decoration: none; font-family: sans-serif; font-weight: bold; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.5);'>
+            DOWNLOAD KEBAB EMPIRE
+        </a>
+    </div>
+</body>
+"@
+    $htmlContent = $htmlContent -replace "</body>", $downloadLink
+    Set-Content -Path $htmlPath -Value $htmlContent
+    Write-Host "✅ Download link added to index.html!" -ForegroundColor Green
+} else {
+    Write-Host "ℹ️ Download link already exists." -ForegroundColor Yellow
+}
+
+# 3. Git Push Kebab Empire
+Set-Location "C:\Users\Lenovo\kebab-empire"
+git add .
+git commit -m "Build installer and prepare for release"
+git push
+Write-Host "✅ Kebab Empire pushed to Git!" -ForegroundColor Green
+
+# 4. Git Push Website
+Set-Location $websitePath
+git add .
+git commit -m "Add Kebab Empire download link"
+git push
+Write-Host "✅ Website pushed to Git!" -ForegroundColor Green
+
+# 5. Run Website
+Write-Host "🚀 Starting Website..." -ForegroundColor Cyan
+npm run dev
