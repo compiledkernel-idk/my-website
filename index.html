@@ -5,22 +5,29 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>compiledkernel-idk | Developer</title>
+  <title>compiledkernel-idk | Low-Level Developer</title>
+  <meta name="description"
+    content="Low-level programmer specializing in high-performance systems, custom game engines, and 3D games using Assembly x64, C++, and Rust.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet">
 </head>
 
 <body>
+  <!-- Aurora background layer -->
+  <div class="aurora"></div>
+
+  <!-- Main particle canvas -->
   <canvas id="bg-canvas"></canvas>
 
   <main>
     <section id="hero">
-      <h1 class="typing-text"></h1>
+      <h1 class="typing-text" data-text=""></h1>
+      <p class="subtitle animate-text delay-1">Low-Level Developer • Systems Programmer • Game Engine Architect</p>
       <div class="scroll-indicator animate-text delay-2">
-        <span>Scroll</span>
+        <span>Explore</span>
         <div class="arrow">↓</div>
       </div>
     </section>
