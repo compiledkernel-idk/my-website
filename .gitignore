@@ -26,5 +26,7 @@ dist-ssr
 # Large game files
 *.exe
 *.zip
+*.7z
 public/*.exe
 public/*.zip
+public/*.7z
